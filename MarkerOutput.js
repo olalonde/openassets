@@ -21,12 +21,13 @@ var Opcode = require('bitcore/lib/Opcode'),
     Script = require('bitcore/lib/Script'),
     LEB128 = require('./LEB128');
 
+
 /**
  * MarkerOutput
  *
  * Represents an Open Assets marker output[1]. The marker output
  * is what distinguishes a transaction as being an Open Assets
- * Protocol transaction. 
+ * Protocol transaction.
  *
  * References:
  * [1] https://github.com/OpenAssets/open-assets-protocol/blob/master/specification.mediawiki#Marker_output
@@ -39,7 +40,7 @@ var OPEN_ASSETS_VERSION = 0x0100;
 var MAX_ASSET_QUANTITY  = Math.pow(2,63) -1;
 
 /**
- * Constructor 
+ * Constructor
  * @param array(int) assetQuantities    The list of asset quantities
  * @param Buffer     metadata           The metadata in the marker output
 **/
@@ -70,11 +71,11 @@ function MarkerOutput (assetQuantities, metadata) {
 
   // Validate and store provided metadata
   this.metadata = (metadata && Buffer.isBuffer(metadata))
-    ? metadata 
+    ? metadata
     : new Buffer([]);
 };
 
-/** 
+/**
  * Serialize the marker output data into a payload buffer
 **/
 MarkerOutput.prototype.serializePayload = function () {
@@ -82,26 +83,25 @@ MarkerOutput.prototype.serializePayload = function () {
   var i, buffer;
 
   // Initialize a buffer to hold the payload
-  buffer = new Put()
-    .word16be(OPEN_ASSETS_TAG)            // Add Open Assets tag
-    .word16be(OPEN_ASSETS_VERSION)        // Add Open Assets version 
+  buffer = new Put();
+  buffer.word16be(OPEN_ASSETS_TAG)            // Add Open Assets tag
+    .word16be(OPEN_ASSETS_VERSION)        // Add Open Assets version
     .varint(this.assetQuantities.length); // Add number of assetQuantities
-  
+
   // LEB128-encode each asset quantity and store as varint
   for(i = 0; i < this.assetQuantities.length; i++) {
     buffer.put(LEB128.encode(this.assetQuantities[i]));
   }
 
   // Encode the output metadata
-  buffer
-    .varint(this.metadata.length)         // Add the metadata length
-    .put(this.metadata);                  // Add the metadata
+  buffer.varint(this.metadata.length);        // Add the metadata length
+  buffer.put(this.metadata);                  // Add the metadata
 
   // Return the serialized payload buffer
   return buffer.buffer();
 };
 
-/** 
+/**
  * Deserialize the marker output payload
  * @param Buffer  payload  A Buffer object containing the marker output payload
  * @return MarkerOutput    The marker output object

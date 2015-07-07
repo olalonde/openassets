@@ -36,9 +36,9 @@
   },
   "dependencies": {
     "async": "^0.9.0",
-    "bitcore": "^0.1.39",
+    "bitcore": "^0.1.41",
     "bufferput": "^0.1.2",
-    "buffertools": "^2.1.2",
+    "buffertools": "^2.1.3",
     "leb": "^0.3.0"
   }
 }

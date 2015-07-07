@@ -9,7 +9,7 @@ var assert = require('assert'),
     expect = chai.expect,
     should = chai.should(),
     sinon  = require('sinon'),
-    MarkerOutput = require('../lib/protocol/MarkerOutput'); 
+    MarkerOutput = require('../MarkerOutput');
 
 describe("MarkerOutput", function () {
 
@@ -72,17 +72,17 @@ describe("MarkerOutput", function () {
     });
 
     it('should include the Open Assets tag', function (done) {
-      bs.slice(0,2).should.deep.equal([0x4f,0x41]); 
+      bs.slice(0,2).should.deep.equal([0x4f,0x41]);
       done();
     });
 
     it('should include the Open Assets version number', function (done) {
-      bs.slice(2,4).should.deep.equal([0x01,0x00]); 
+      bs.slice(2,4).should.deep.equal([0x01,0x00]);
       done();
     });
 
     it('should include the length of the assetQuantities list', function (done) {
-      bs.slice(4,5).should.deep.equal([0x03]); 
+      bs.slice(4,5).should.deep.equal([0x03]);
       done();
     });
 
