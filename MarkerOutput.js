@@ -15,10 +15,11 @@
 
 'use strict';
 
-var Opcode = require('bitcore/lib/Opcode'),
-    Parser = require('bitcore/util/BinaryParser'),
+var bitcore = require('bitcore');
+var Opcode = bitcore.Opcode,
+    Parser = require('./BinaryParser'),
     Put    = require('bufferput'),
-    Script = require('bitcore/lib/Script'),
+    Script = bitcore.Script,
     LEB128 = require('./LEB128');
 
 
@@ -170,16 +171,10 @@ MarkerOutput.prototype.buildScript = function (data) {
   }
 
   // Create a Script object for the output script
-  var script = new Script();
-
-  // Add the OP_RETURN opcode
-  script.writeOp(Opcode.map.OP_RETURN);
-
-  // Add the data (OP_PUSHDATA automatically calculated)
-  script.writeBytes(data);
+  var script = Script.buildDataOut(data);
 
   // Return the buffer for the built script
-  return script.getBuffer();
+  return script.toBuffer();
 
 };
 
@@ -200,20 +195,19 @@ MarkerOutput.prototype.parseScript = function (outputScript) {
 
   // Create a Script object from the provided outputScript and parse it
   script = new Script(outputScript);
-  script.parse();
 
   // The opcode must be OP_RETURN
-  if (!script.chunks[0] || script.chunks[0] != Opcode.map.OP_RETURN) {
+  if (!script.chunks[0] || script.chunks[0].opcodenum != Opcode.map.OP_RETURN) {
     return false;
   }
 
   // There must be exactly one data section following the opcode
-  if (!script.chunks[1] || script.chunks.length > 2) {
+  if (!script.chunks[1] || script.chunks.len > 2) {
     return false;
   }
 
   // The payload must begin with the Open Assets tag and Open Assets version
-  payload = script.chunks[1];
+  payload = script.chunks[1].buf;
   if ('0x' + payload.slice(0,2).toString('hex') != OPEN_ASSETS_TAG ||
       '0x' + payload.slice(2,4).toString('hex') != OPEN_ASSETS_VERSION) {
     return false;
