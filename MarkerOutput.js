@@ -15,12 +15,13 @@
 
 'use strict';
 
-var bitcore = require('bitcore');
-var Opcode = bitcore.Opcode,
-    Parser = require('./BinaryParser'),
-    Put    = require('bufferput'),
-    Script = bitcore.Script,
-    LEB128 = require('./LEB128');
+// var bitcore = require('bitcore');
+// var Opcode = bitcore.Opcode;
+var OP_RETURN = 106;
+var Parser = require('./BinaryParser');
+var Put    = require('bufferput');
+// var Script = bitcore.Script;
+var LEB128 = require('./LEB128');
 
 
 /**
@@ -163,6 +164,7 @@ MarkerOutput.prototype.deserializePayload = function (payload) {
  * @param Buffer data   The content of the PUSHDATA
  * @return Buffer       The final script
 **/
+/*
 MarkerOutput.prototype.buildScript = function (data) {
 
   // Ensure data is a valid Buffer object
@@ -177,6 +179,7 @@ MarkerOutput.prototype.buildScript = function (data) {
   return script.toBuffer();
 
 };
+*/
 
 /**
  * Parse an output script and return the payload if the output matches
@@ -184,6 +187,7 @@ MarkerOutput.prototype.buildScript = function (data) {
  * @param   Buffer  outputScript  The output script to be parsed
  * @return  Buffer  The marker output payload
 **/
+/*
 MarkerOutput.prototype.parseScript = function (outputScript) {
 
   var script, payload;
@@ -197,7 +201,7 @@ MarkerOutput.prototype.parseScript = function (outputScript) {
   script = new Script(outputScript);
 
   // The opcode must be OP_RETURN
-  if (!script.chunks[0] || script.chunks[0].opcodenum != Opcode.map.OP_RETURN) {
+  if (!script.chunks[0] || script.chunks[0].opcodenum != OP_RETURN) {
     return false;
   }
 
@@ -216,6 +220,7 @@ MarkerOutput.prototype.parseScript = function (outputScript) {
   return payload;
 
 };
+*/
 
 
 // Public API for this object
